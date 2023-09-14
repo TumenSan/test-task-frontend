@@ -1,7 +1,8 @@
+import './NewsList.css'
 import { NewsModel } from "./Models/NewsModel";
 import React, { useState, useEffect } from "react";
-import { runInAction, action } from "mobx";
-import { observer } from 'mobx-react-lite';
+import { observer } from "mobx-react";
+import { runInAction } from "mobx"
 import { Container, Header, Menu, Message, Segment } from "semantic-ui-react";
 import newsState from "../state/NewsState";
 
@@ -17,6 +18,7 @@ export const NewsList = observer(() => {
 
   // Функция для обработки 100 новостей
   async function fetchLast100News() {
+    newsState.ListNews = [];
     let Last100Id = await fetchLastIDNews();
     console.log(Last100Id, " Last100Id");
     Last100Id.forEach(async (NewsId, index) => {
@@ -26,7 +28,7 @@ export const NewsList = observer(() => {
         if (!data.hasOwnProperty("error"))
           if (data.type === "story") {
             console.log(data);
-            action(() => {
+            runInAction(() => {
               newsState.ListNews.push(
                 new NewsModel(
                   data.id,
@@ -40,7 +42,8 @@ export const NewsList = observer(() => {
                   data.url
                 )
               );
-            })();
+              newsState.NewsListIsLoading = false;
+            })
           }
       } catch (error) {
         console.log(error);
@@ -52,15 +55,25 @@ export const NewsList = observer(() => {
 
   useEffect(() => {
     fetchLast100News();
+
+    // Установка интервала для обновления каждую минуту (60,000 миллисекунд)
+    const intervalId = setInterval(() => {
+      fetchLast100News();
+    }, 60000);
+
+    // Очистка интервала при размонтировании компонента
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
-    <div>
+    <div className="news-list">
       {newsState.ListNews?.map((News, i) => (
-        <div className="News" key={i}>
+        <div className="news-item" key={i}>
+          {i+1}.
           <a href={`/news/${News?.id}`}>{News?.title}</a>
-          <p>Rating: {News?.score}</p>
-          <p>Author: {News?.by}</p>
+          <p>{News?.score} points by {News?.by}</p>
           <p>Date: {News?.time}</p>
         </div>
       ))}
