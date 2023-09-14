@@ -1,10 +1,12 @@
 import { NewsModel } from "./Models/NewsModel";
 import React, { useState, useEffect } from "react";
+import { runInAction, action } from "mobx";
+import { observer } from 'mobx-react-lite';
 import { Container, Header, Menu, Message, Segment } from "semantic-ui-react";
+import newsState from "../state/NewsState";
 
 // Компонент для отображения списка новостей
-export const NewsList = () => {
-  const [StateListNews, setStateListNews] = useState([]);
+export const NewsList = observer(() => {
 
   // Находим последние новости
   function fetchLastIDNews() {
@@ -24,25 +26,28 @@ export const NewsList = () => {
         if (!data.hasOwnProperty("error"))
           if (data.type === "story") {
             console.log(data);
-            setStateListNews((UseStateNews) => [
-              ...UseStateNews,
-              new NewsModel(
-                data.id,
-                data.descendants,
-                data.by,
-                data.kids,
-                data.score,
-                data.time,
-                data.type,
-                data.title,
-                data.url
-              ),
-            ]);
+            action(() => {
+              newsState.ListNews.push(
+                new NewsModel(
+                  data.id,
+                  data.descendants,
+                  data.by,
+                  data.kids,
+                  data.score,
+                  data.time,
+                  data.type,
+                  data.title,
+                  data.url
+                )
+              );
+            })();
           }
       } catch (error) {
         console.log(error);
       }
     });
+
+    console.log(newsState.ListNews);
   }
 
   useEffect(() => {
@@ -51,7 +56,7 @@ export const NewsList = () => {
 
   return (
     <div>
-      {StateListNews?.map((News, i) => (
+      {newsState.ListNews?.map((News, i) => (
         <div className="News" key={i}>
           <a href={`/news/${News?.id}`}>{News?.title}</a>
           <p>Rating: {News?.score}</p>
@@ -61,6 +66,6 @@ export const NewsList = () => {
       ))}
     </div>
   );
-}
+})
 
 export default NewsList;
