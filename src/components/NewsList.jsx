@@ -2,9 +2,9 @@ import { NewsModel } from "./Models/NewsModel";
 import React, { useState, useEffect } from "react";
 import { Container, Header, Menu, Message, Segment } from "semantic-ui-react";
 
-// Создадим компонент для отображения списка новостей
+// Компонент для отображения списка новостей
 export const NewsList = () => {
-  const [UseStateNews, setUseStateNews] = useState([]);
+  const [StateListNews, setStateListNews] = useState([]);
 
   // Находим последние новости
   function fetchLastIDNews() {
@@ -24,7 +24,7 @@ export const NewsList = () => {
         if (!data.hasOwnProperty("error"))
           if (data.type === "story") {
             console.log(data);
-            setUseStateNews((UseStateNews) => [
+            setStateListNews((UseStateNews) => [
               ...UseStateNews,
               new NewsModel(
                 data.id,
@@ -46,19 +46,17 @@ export const NewsList = () => {
   }
 
   useEffect(() => {
-    //fetchSingleNews(1);
-    //console.log(fetchLastItemId());
     fetchLast100News();
   }, []);
 
   return (
     <div>
-      {UseStateNews?.map((News, i) => (
+      {StateListNews?.map((News, i) => (
         <div className="News" key={i}>
-          <a href={News.url}>{News.title}</a>
-          <p>Rating: {News.score}</p>
-          <p>Author: {News.by}</p>
-          <p>Date: {News.time}</p>
+          <a href={`/news/${News?.id}`}>{News?.title}</a>
+          <p>Rating: {News?.score}</p>
+          <p>Author: {News?.by}</p>
+          <p>Date: {News?.time}</p>
         </div>
       ))}
     </div>
