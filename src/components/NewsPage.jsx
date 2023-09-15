@@ -12,12 +12,11 @@ export const NewsPage = observer(() => {
   const [singleNews, setSingleNews] = useState(null);
   const params = useParams();
 
-  console.log(newsState.ListNews[2]);
-    
-  const foundSingleNews = newsState.ListNews.find((e) => e.id === params.id);
-  if (foundSingleNews) {
-    setSingleNews(foundSingleNews);
-  }
+  //console.log(newsState.ListNews[2]);
+  newsState.clgNews();
+  const foundSingleNews = newsState.getSingleNews(params.id);
+  console.log(foundSingleNews);
+  setSingleNews(foundSingleNews);
 
   return (
     <div>
