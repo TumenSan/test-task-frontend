@@ -3,6 +3,7 @@ import { NewsModel } from "./Models/NewsModel";
 import { CommentModel } from "./Models/CommentModel";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Container, Header, Menu, Message, Segment } from "semantic-ui-react";
 import { observer } from 'mobx-react';
 import newsState from "../state/NewsState";
@@ -13,14 +14,16 @@ export const NewsPage = observer(() => {
   const params = useParams();
 
   //console.log(newsState.ListNews[2]);
-  newsState.clgNews();
+  //newsState.clgNews();
+  console.log(newsState.ListNews);
+  console.log(newsState.NewsListIsLoading);
   const foundSingleNews = newsState.getSingleNews(params.id);
   console.log(foundSingleNews);
   setSingleNews(foundSingleNews);
 
   return (
     <div>
-      <a href="/">Go back</a>
+      <Link to="/">Go back</Link>
       <div className="SingleNews">
         <a href={singleNews?.url}>{singleNews?.url}</a>
         <p>{singleNews?.title}</p>

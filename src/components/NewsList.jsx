@@ -3,6 +3,7 @@ import { NewsModel } from "./Models/NewsModel";
 import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import { runInAction } from "mobx";
+import { Link } from "react-router-dom";
 import { Container, Header, Menu, Message, Segment } from "semantic-ui-react";
 import newsState from "../state/NewsState";
 
@@ -27,7 +28,7 @@ export const NewsList = observer(() => {
       {newsState.ListNews?.map((News, i) => (
         <div className="news-item" key={i}>
           {i+1}.
-          <a href={`/news/${News?.id}`}>{News?.title}</a>
+          <Link to={`/news/${News?.id}`}>{News?.title}</Link>
           <p>{News?.score} points by {News?.by}</p>
           <p>Date: {News?.time}</p>
         </div>
