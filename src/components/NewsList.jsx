@@ -30,7 +30,7 @@ export const NewsList = observer(() => {
           {i+1}.
           <Link to={`/news/${News?.id}`}>{News?.title}</Link>
           <p>{News?.score} points by {News?.by}</p>
-          <p>Date: {News?.time}</p>
+          <p>{News?.time}</p>
         </div>
       ))}
     </div>

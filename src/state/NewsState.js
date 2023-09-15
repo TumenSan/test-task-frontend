@@ -25,7 +25,7 @@ class NewsState {
   }
 
   getSingleNews(id) {
-    let foundSingleNews = this.ListNews.find((e) => e.id === id);
+    let foundSingleNews = this.ListNews.find(e => e.id.toString() === id.toString());
     return foundSingleNews
   }
 
@@ -53,6 +53,7 @@ class NewsState {
           if (data.type === "story") {
             console.log(data);
             runInAction(() => {
+              let NewsDate = new Date(data?.time * 1000).toLocaleString(undefined, { hour: 'numeric', minute: 'numeric' });
               this.ListNews.push(
                 new NewsModel(
                   data.id,
@@ -60,7 +61,7 @@ class NewsState {
                   data.by,
                   data.kids,
                   data.score,
-                  data.time,
+                  NewsDate,
                   data.type,
                   data.title,
                   data.url

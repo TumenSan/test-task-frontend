@@ -15,20 +15,27 @@ export const NewsPage = observer(() => {
 
   //console.log(newsState.ListNews[2]);
   //newsState.clgNews();
-  console.log(newsState.ListNews);
-  console.log(newsState.NewsListIsLoading);
-  const foundSingleNews = newsState.getSingleNews(params.id);
-  console.log(foundSingleNews);
-  setSingleNews(foundSingleNews);
+
+  useEffect(() => {
+    console.log(newsState.ListNews);
+    console.log(newsState.NewsListIsLoading);
+    const foundSingleNews = newsState.getSingleNews(params.id);
+    console.log(foundSingleNews);
+    setSingleNews(foundSingleNews);
+  }, [params.id]);
 
   return (
     <div>
       <Link to="/">Go back</Link>
       <div className="SingleNews">
-        <a href={singleNews?.url}>{singleNews?.url}</a>
-        <p>{singleNews?.title}</p>
-        <p>Date: {singleNews?.time}</p>
-        <p>Author: {singleNews?.by}</p>
+        {singleNews && (
+          <>
+            <a href={singleNews.url}>{singleNews.url}</a>
+            <p>{singleNews.title}</p>
+            <p>{singleNews.time}</p>
+            <p>Author: {singleNews.by}</p>
+          </>
+        )}
         
       </div>
     </div>
