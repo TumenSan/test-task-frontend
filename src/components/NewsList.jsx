@@ -9,20 +9,6 @@ import newsState from "../state/NewsState";
 
 // Компонент для отображения списка новостей
 export const NewsList = observer(() => {
-  useEffect(() => {
-    newsState.fetchLast100News();
-
-    // Установка интервала для обновления каждую минуту (60,000 миллисекунд)
-    const intervalId = setInterval(() => {
-      newsState.fetchLast100News();
-    }, 60000);
-
-    // Очистка интервала при размонтировании компонента
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
-  
   return (
     <div className="news-list">
       {newsState.ListNews?.map((News, i) => (

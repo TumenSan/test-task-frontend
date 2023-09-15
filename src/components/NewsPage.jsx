@@ -11,6 +11,8 @@ import newsState from "../state/NewsState";
 // Создадим компонент для отображения новости
 export const NewsPage = observer(() => {
   const [singleNews, setSingleNews] = useState(null);
+  const [CountComments, setCountComments] = useState(0);
+  const [Comments, setComments] = useState([]);
   const params = useParams();
 
   //console.log(newsState.ListNews[2]);
@@ -20,6 +22,7 @@ export const NewsPage = observer(() => {
     console.log(newsState.ListNews);
     console.log(newsState.NewsListIsLoading);
     const foundSingleNews = newsState.getSingleNews(params.id);
+    setCountComments(foundSingleNews.kids?.length || 0);
     console.log(foundSingleNews);
     setSingleNews(foundSingleNews);
   }, [params.id]);
@@ -34,6 +37,7 @@ export const NewsPage = observer(() => {
             <p>{singleNews.title}</p>
             <p>{singleNews.time}</p>
             <p>Author: {singleNews.by}</p>
+            <p>Comments: {CountComments}</p>
           </>
         )}
         
