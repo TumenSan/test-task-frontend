@@ -2,37 +2,31 @@
 
 export class CommentModel {
   id = 0;
-  descendants = '';
   by = '';
   kids = [];
-  score = 0;
+  text = '';
+  parent = {};
   time = 0;
   type = '';
-  url = '';
+  replies = [];
 
-  constructor(id, descendants, by, kids, score, time, type, url) {
+  constructor(id, by, kids, text, parent, time, type) {
     this.id = id;
-    this.descendants = descendants;
     this.by = by;
     this.kids = kids;
-    this.score = score;
+    this.text = text;
+    this.parent = parent;
     this.time = time;
     this.type = type;
-    this.url = url;
   }
 
   update(data) {
     this.id = data.id;
-    this.descendants = data.descendants;
     this.by = data.by;
     this.kids = data.kids;
-    this.score = data.score;
+    this.text = data.text;
+    this.parent = data.parent;
     this.time = data.time;
     this.type = data.type;
-    this.url = data.url;
-  }
-
-  addComment(comment) {
-    this.comments.push(comment);
   }
 }

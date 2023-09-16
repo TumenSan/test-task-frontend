@@ -8,14 +8,11 @@ import { Container, Header, Menu, Message, Segment } from "semantic-ui-react";
 import { observer } from 'mobx-react';
 import newsState from "../state/NewsState";
 import commentState from "../state/CommentState";
-import { Comment } from "./Comment";
 
-// Создадим компонент для отображения новости
-export const NewsPage = observer(() => {
-  const [singleNews, setSingleNews] = useState(null);
-  const [CountComments, setCountComments] = useState(0);
+// Создадим компонент для отображения комментария
+export const Comment = observer(({ comment }) => {
+  const [expanded, setExpanded] = useState(false);
   const [Comments, setComments] = useState([]);
-  const params = useParams();
 
   // Функция для обработки комментария
   async function fetchSingleComment(CommentId) {
@@ -42,54 +39,39 @@ export const NewsPage = observer(() => {
     }
   }
 
+  const toggleReplies = () => {
+    setExpanded(!expanded);
+  };
+
   async function fetchComments(Comments){
     Comments.forEach(async (CommentId, index) => {
-      console.log(1);
-      let comment = await fetchSingleComment(CommentId);
-      console.log(comment);
+      let comment = await commentState.fetchSingleComment(CommentId);
       setComments((e) => [...e, comment]);
     });
   }
 
   useEffect(() => {
-    console.log(newsState.ListNews);
-    console.log(newsState.NewsListIsLoading);
-    const foundSingleNews = newsState.getSingleNews(params.id);
-    setCountComments(foundSingleNews.kids?.length || 0);
-    console.log(foundSingleNews);
-    setSingleNews(foundSingleNews);
-    if (foundSingleNews?.kids && foundSingleNews.kids.length > 0) {
-      fetchComments(foundSingleNews.kids);
+    if (comment?.kids && comment.kids.length > 0) {
+      fetchComments(comment.kids);
     }
-
-    //CommentState.fetchComments();
-    //GetComments(foundOne);
-  }, [params.id]);
+  }, [])
 
   return (
     <div>
-      <Link to="/">Go back</Link>
-      <div className="SingleNews">
-        {singleNews && (
-          <>
-            <a href={singleNews?.url}>{singleNews?.url}</a>
-            <p>{singleNews?.title}</p>
-            <p>{singleNews?.time}</p>
-            <p>Author: {singleNews?.by}</p>
-            <p>Comments: {CountComments}</p>
-            {Comments?.map((SingleComment, i) => (
-              <div key={i}>
-                <Comment
-                  comment={SingleComment}
-                />
-              </div>
-            ))}
-          </>
-        )}
+      <div>
+        <p>{comment?.text}</p>
+        <p>{comment?.by}</p>
+        <p>{comment?.time}</p>
+        <button
+          type="button"
+          onClick={() => toggleReplies()}
+        >
+          {expanded ? "Скрыть ответы" : "Показать ответы"}
+        </button>
         
       </div>
     </div>
   );
 })
 
-export default NewsPage;
+export default Comment;

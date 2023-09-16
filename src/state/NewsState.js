@@ -5,7 +5,7 @@ class NewsState {
   ListNews = [];
   NewsListIsLoading = true;
 
-  constructor(value, ListNews, NewsListIsLoading) {
+  constructor(ListNews, NewsListIsLoading) {
       makeObservable(this, {
           ListNews: observable,
           NewsListIsLoading: observable,
@@ -15,7 +15,6 @@ class NewsState {
           getNewsListIsLoading: computed,
           fetchLast100News: action
       })
-      this.value = value
       this.ListNews = ListNews
       this.NewsListIsLoading = NewsListIsLoading
   }
