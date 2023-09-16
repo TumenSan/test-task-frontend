@@ -10,8 +10,9 @@ import newsState from "../state/NewsState";
 import commentState from "../state/CommentState";
 
 // Создадим компонент для отображения комментария
-export const Comment = observer(({ comment }) => {
+export const Comment = ({ comment }) => {
   const [expanded, setExpanded] = useState(false);
+  const [replyExist, setReplyExist] = useState(false);
   const [Comments, setComments] = useState([]);
 
   // Функция для обработки комментария
@@ -45,7 +46,8 @@ export const Comment = observer(({ comment }) => {
 
   async function fetchComments(Comments){
     Comments.forEach(async (CommentId, index) => {
-      let comment = await commentState.fetchSingleComment(CommentId);
+      let comment = await fetchSingleComment(CommentId);
+      console.log('1:23 ', comment);
       setComments((e) => [...e, comment]);
     });
   }
@@ -59,19 +61,27 @@ export const Comment = observer(({ comment }) => {
   return (
     <div>
       <div>
-        <p>{comment?.text}</p>
+        <p dangerouslySetInnerHTML={{ __html: comment?.text }}></p>
         <p>{comment?.by}</p>
         <p>{comment?.time}</p>
-        <button
-          type="button"
-          onClick={() => toggleReplies()}
-        >
-          {expanded ? "Скрыть ответы" : "Показать ответы"}
-        </button>
-        
+        {comment.hasOwnProperty("kids") && Array.isArray(comment.kids) && comment.kids.length > 0 && (
+          <button
+            type="button"
+            onClick={() => toggleReplies()}
+          >
+
+            {expanded ? "Скрыть ответы" : "Показать ответы"}
+          </button>
+        )}
+        {expanded &&
+          comment?.kids.map((reply, index) => (
+            <div key={index} style={{ marginLeft: "20px" }}>
+              <Comment comment={reply} />
+            </div>
+        ))}
       </div>
     </div>
   );
-})
+}
 
 export default Comment;
