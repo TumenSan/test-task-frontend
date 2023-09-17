@@ -1,10 +1,39 @@
-import React, { useState, useEffect } from "react";
-import { Switch, Route } from "react-router-dom";
+import React, { useRef, useEffect } from "react";
+import { Switch, Route, useLocation } from "react-router-dom";
 import { NewsPage } from "./components/NewsPage";
 import { NewsList } from './components/NewsList';
-import { Container, Header, Menu, Message, Segment } from "semantic-ui-react";
+import { Container, Header, Button, Segment } from "semantic-ui-react";
 import newsState from "./state/NewsState";
 import "./App.css";
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  const prevScrollRef = useRef(null);
+
+  useEffect(() => {
+    const prevScroll = prevScrollRef.current;
+
+    if (prevScroll) {
+      window.scrollTo(0, prevScroll);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      prevScrollRef.current = window.pageYOffset;
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  return null;
+};
 
 function App() {
   useEffect(() => {
@@ -13,7 +42,7 @@ function App() {
     // Установка интервала для обновления каждую минуту (60,000 миллисекунд)
     const intervalId = setInterval(() => {
       newsState.fetchLast100News();
-    }, 60000);
+    }, 600000);
 
     // Очистка интервала при размонтировании компонента
     return () => {
@@ -25,18 +54,19 @@ function App() {
     <div className="App">
       <Header as="h1" attached="top">
         Hacker news
-        <button
+      </Header>
+      <Switch>
+        <Route exact path="/">
+        <Button
           type="button"
           onClick={() => newsState.fetchLast100News()}
         >
           Refresh
-        </button>
-      </Header>
-      <Switch>
-        <Route exact path="/">
+        </Button>
           <NewsList />
         </Route>
         <Route path="/news/:id">
+          <ScrollToTop />
           <NewsPage />
         </Route>
       </Switch>

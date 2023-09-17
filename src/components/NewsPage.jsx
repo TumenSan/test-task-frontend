@@ -1,10 +1,9 @@
 //import './NewsPage.css';
-import { NewsModel } from "./Models/NewsModel";
 import { CommentModel } from "./Models/CommentModel";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Container, Header, Menu, Message, Segment } from "semantic-ui-react";
+import { useHistory } from "react-router-dom";
+import { Container, Button, Segment } from "semantic-ui-react";
 import { observer } from 'mobx-react';
 import newsState from "../state/NewsState";
 import commentState from "../state/CommentState";
@@ -16,6 +15,12 @@ export const NewsPage = observer(() => {
   const [CountComments, setCountComments] = useState(0);
   const [Comments, setComments] = useState([]);
   const params = useParams();
+
+  const history = useHistory();
+  
+  const handleClick = () => {
+    history.goBack();
+  };
 
   // Функция для обработки комментария
   async function fetchSingleComment(CommentId) {
@@ -68,15 +73,30 @@ export const NewsPage = observer(() => {
 
   return (
     <div>
-      <Link to="/">Go back</Link>
+      <Button
+        type="button"
+        onClick={() => handleClick()}
+      >
+        Вернуться назад
+      </Button>
       <div className="SingleNews">
         {singleNews && (
-          <>
-            <a href={singleNews?.url}>{singleNews?.url}</a>
-            <p>{singleNews?.title}</p>
-            <p>{singleNews?.time}</p>
-            <p>Author: {singleNews?.by}</p>
-            <p>Comments: {CountComments}</p>
+          <Container>
+            <Segment attached>
+              <a href={singleNews?.url}>{singleNews?.url}</a>
+            </Segment>
+            <Segment attached>
+              <p>{singleNews?.title}</p>
+            </Segment>
+            <Segment attached>
+              <p>{singleNews?.time}</p>
+            </Segment>
+            <Segment attached>
+              <p>Author: {singleNews?.by}</p>
+            </Segment>
+            <Segment attached style={{ marginBottom: '20px' }}>
+              <p>Comments: {CountComments}</p>
+            </Segment>
             {Comments?.map((SingleComment, i) => (
               <div key={i}>
                 <Comment
@@ -84,7 +104,7 @@ export const NewsPage = observer(() => {
                 />
               </div>
             ))}
-          </>
+          </Container>
         )}
         
       </div>

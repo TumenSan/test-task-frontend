@@ -4,7 +4,7 @@ import { CommentModel } from "./Models/CommentModel";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, Header, Menu, Message, Segment } from "semantic-ui-react";
+import { Container, Button, Segment } from "semantic-ui-react";
 import { observer } from 'mobx-react';
 import newsState from "../state/NewsState";
 import commentState from "../state/CommentState";
@@ -35,8 +35,10 @@ export const Comment = ({ comment }) => {
           );
           return(comment);
         }
+      else return (false);
     } catch (error) {
       console.log(error);
+      return (false);
     }
   }
 
@@ -48,7 +50,8 @@ export const Comment = ({ comment }) => {
     Comments.forEach(async (CommentId, index) => {
       let comment = await fetchSingleComment(CommentId);
       console.log('1:23 ', comment);
-      setComments((e) => [...e, comment]);
+      if (comment)
+        setComments((e) => [...e, comment]);
     });
   }
 
@@ -60,26 +63,36 @@ export const Comment = ({ comment }) => {
 
   return (
     <div>
-      <div>
-        <p dangerouslySetInnerHTML={{ __html: comment?.text }}></p>
-        <p>{comment?.by}</p>
-        <p>{comment?.time}</p>
+      <Container style={{ paddingBottom: '20px' }}>
+        <Segment attached>
+          <p dangerouslySetInnerHTML={{ __html: comment?.text }}></p>
+        </Segment>
+        <Segment attached>
+          <p>{comment?.by}</p>
+        </Segment>
+        <Segment attached>
+          <p>{comment?.time}</p>
+        </Segment>
         {comment.hasOwnProperty("kids") && Array.isArray(comment.kids) && comment.kids.length > 0 && (
-          <button
-            type="button"
-            onClick={() => toggleReplies()}
-          >
+          <Segment attached>
+            <Button
+              type="button"
+              onClick={() => toggleReplies()}
+            >
 
-            {expanded ? "Скрыть ответы" : "Показать ответы"}
-          </button>
+              {expanded ? "Скрыть ответы" : "Показать ответы"}
+            </Button>
+          </Segment>
         )}
         {expanded &&
           comment?.kids.map((reply, index) => (
-            <div key={index} style={{ marginLeft: "20px" }}>
-              <Comment comment={reply} />
-            </div>
+            <Segment attached>
+              <div key={index} style={{ marginLeft: "20px" }}>
+                <Comment comment={reply} />
+              </div>
+            </Segment>
         ))}
-      </div>
+      </Container >
     </div>
   );
 }
