@@ -61,7 +61,7 @@ function App() {
           type="button"
           onClick={() => newsState.fetchLast100News()}
         >
-          Обновить
+          Update
         </Button>
           <NewsList />
         </Route>
