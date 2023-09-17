@@ -1,10 +1,6 @@
 import './NewsList.css'
-import { NewsModel } from "./Models/NewsModel";
-import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react";
-import { runInAction } from "mobx";
 import { Link } from "react-router-dom";
-import { Container, Header, Menu, Message, Segment } from "semantic-ui-react";
 import newsState from "../state/NewsState";
 
 // Компонент для отображения списка новостей

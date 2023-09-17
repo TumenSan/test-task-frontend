@@ -50,7 +50,6 @@ class NewsState {
         const data = await response.json();
         if (!data.hasOwnProperty("error"))
           if (data.type === "story") {
-            console.log(data);
             runInAction(() => {
               let NewsDate = new Date(data?.time * 1000).toLocaleString(undefined, { hour: 'numeric', minute: 'numeric' });
               this.ListNews.push(
@@ -73,8 +72,6 @@ class NewsState {
         console.log(error);
       }
     });
-
-    console.log(newsState.ListNews);
   }
 }
 

@@ -6,7 +6,6 @@ import { useHistory } from "react-router-dom";
 import { Container, Button, Segment } from "semantic-ui-react";
 import { observer } from 'mobx-react';
 import newsState from "../state/NewsState";
-import commentState from "../state/CommentState";
 import { Comment } from "./Comment";
 
 // Создадим компонент для отображения новости
@@ -29,7 +28,6 @@ export const NewsPage = observer(() => {
       const data = await response.json();
       if (!data.hasOwnProperty("error"))
         if (data.type === "comment") {
-          console.log(data);
           let CommentNewsDate = new Date(data?.time * 1000).toLocaleString(undefined, { hour: 'numeric', minute: 'numeric' });
           let comment = new CommentModel(
             data.id,
@@ -85,17 +83,11 @@ export const NewsPage = observer(() => {
             <Segment attached>
               <a href={singleNews?.url}>{singleNews?.url}</a>
             </Segment>
-            <Segment attached>
-              <p>{singleNews?.title}</p>
-            </Segment>
-            <Segment attached>
-              <p>{singleNews?.time}</p>
-            </Segment>
-            <Segment attached>
-              <p>Author: {singleNews?.by}</p>
-            </Segment>
             <Segment attached style={{ marginBottom: '20px' }}>
-              <p>Comments: {CountComments}</p>
+              <h3>{singleNews?.title}</h3>
+              <p>{singleNews?.time}</p>
+              <p>Author: {singleNews?.by}</p>
+              <p>Replies: {CountComments}</p>
             </Segment>
             {Comments?.map((SingleComment, i) => (
               <div key={i}>

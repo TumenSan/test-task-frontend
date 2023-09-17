@@ -31,7 +31,6 @@ class CommentState {
       const data = await response.json();
       if (!data.hasOwnProperty("error"))
         if (data.type === "comment") {
-          console.log(data);
           runInAction(() => {
             let CommentNewsDate = new Date(data?.time * 1000).toLocaleString(undefined, { hour: 'numeric', minute: 'numeric' });
             let comment = new CommentModel(
