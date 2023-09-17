@@ -12,11 +12,16 @@ export const Comment = ({ comment }) => {
   // Функция для обработки комментария
   async function fetchSingleComment(CommentId) {
     try {
-      let response = await fetch(`http://localhost:5000/api/comment/${CommentId}`);
+      let response = await fetch(
+        `http://localhost:5000/api/comment/${CommentId}`
+      );
       const data = await response.json();
       if (!data.hasOwnProperty("error"))
         if (data.type === "comment") {
-          let CommentNewsDate = new Date(data?.time * 1000).toLocaleString(undefined, { hour: 'numeric', minute: 'numeric' });
+          let CommentNewsDate = new Date(data?.time * 1000).toLocaleString(
+            undefined,
+            { hour: "numeric", minute: "numeric" }
+          );
           let comment = new CommentModel(
             data.id,
             data.by,
@@ -26,12 +31,11 @@ export const Comment = ({ comment }) => {
             CommentNewsDate,
             data.type
           );
-          return(comment);
-        }
-      else return (false);
+          return comment;
+        } else return false;
     } catch (error) {
       console.log(error);
-      return (false);
+      return false;
     }
   }
 
@@ -39,42 +43,43 @@ export const Comment = ({ comment }) => {
     setExpanded(!expanded);
   };
 
-  async function fetchComments(Comments){
+  async function fetchComments(Comments) {
     Comments.forEach(async (CommentId, index) => {
       let comment = await fetchSingleComment(CommentId);
-      if (typeof comment !== 'undefined')
-        setComments((e) => [...e, comment]);
+      if (typeof comment !== "undefined") setComments((e) => [...e, comment]);
     });
   }
 
   useEffect(() => {
-    if ((comment.hasOwnProperty("by")) && (comment.hasOwnProperty("text")) && (comment.hasOwnProperty("time")))
+    if (
+      comment.hasOwnProperty("by") &&
+      comment.hasOwnProperty("text") &&
+      comment.hasOwnProperty("time")
+    )
       setGoodComment(true);
     if (comment?.kids && comment.kids.length > 0) {
       fetchComments(comment.kids);
     }
-  }, [])
+  }, []);
 
   return (
     <div>
       {GoodComment && (
-        <Container style={{ paddingBottom: '20px' }}>
+        <Container style={{ paddingBottom: "20px" }}>
           <Segment attached>
             <p>By: {comment?.by}</p>
             <p dangerouslySetInnerHTML={{ __html: comment?.text }}></p>
             <p>{comment?.time}</p>
           </Segment>
-          {comment.hasOwnProperty("kids") && Array.isArray(comment.kids) && comment.kids.length > 0 && (
-            <Segment attached>
-              <Button
-                type="button"
-                onClick={() => toggleReplies()}
-              >
-
-                {expanded ? "Close replies" : "Open replies"}
-              </Button>
-            </Segment>
-          )}
+          {comment.hasOwnProperty("kids") &&
+            Array.isArray(comment.kids) &&
+            comment.kids.length > 0 && (
+              <Segment attached>
+                <Button type="button" onClick={() => toggleReplies()}>
+                  {expanded ? "Close replies" : "Open replies"}
+                </Button>
+              </Segment>
+            )}
           {expanded &&
             Comments.map((reply, index) => (
               <Segment attached>
@@ -82,11 +87,11 @@ export const Comment = ({ comment }) => {
                   <Comment comment={reply} />
                 </div>
               </Segment>
-          ))}
-        </Container >
+            ))}
+        </Container>
       )}
     </div>
   );
-}
+};
 
 export default Comment;

@@ -2,12 +2,12 @@
 
 export class CommentModel {
   id = 0;
-  by = '';
+  by = "";
   kids = [];
-  text = '';
+  text = "";
   parent = {};
   time = 0;
-  type = '';
+  type = "";
   replies = [];
 
   constructor(id, by, kids, text, parent, time, type) {

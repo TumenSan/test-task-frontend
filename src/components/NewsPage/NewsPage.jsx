@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Container, Button, Segment } from "semantic-ui-react";
-import { observer } from 'mobx-react';
+import { observer } from "mobx-react";
 import newsState from "../../state/NewsState";
 import { Comment } from "../Comment/Comment";
 
@@ -16,7 +16,7 @@ export const NewsPage = observer(() => {
   const params = useParams();
 
   const history = useHistory();
-  
+
   const handleClick = () => {
     history.goBack();
   };
@@ -24,11 +24,16 @@ export const NewsPage = observer(() => {
   // Функция для обработки комментария
   async function fetchSingleComment(CommentId) {
     try {
-      let response = await fetch(`http://localhost:5000/api/comment/${CommentId}`);
+      let response = await fetch(
+        `http://localhost:5000/api/comment/${CommentId}`
+      );
       const data = await response.json();
       if (!data.hasOwnProperty("error"))
         if (data.type === "comment") {
-          let CommentNewsDate = new Date(data?.time * 1000).toLocaleString(undefined, { hour: 'numeric', minute: 'numeric' });
+          let CommentNewsDate = new Date(data?.time * 1000).toLocaleString(
+            undefined,
+            { hour: "numeric", minute: "numeric" }
+          );
           let comment = new CommentModel(
             data.id,
             data.by,
@@ -38,19 +43,18 @@ export const NewsPage = observer(() => {
             CommentNewsDate,
             data.type
           );
-          return(comment);
+          return comment;
         }
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function fetchComments(Comments){
+  async function fetchComments(Comments) {
     Comments.forEach(async (CommentId, index) => {
       let comment = await fetchSingleComment(CommentId);
       console.log(comment);
-      if (typeof comment !== 'undefined')
-        setComments((e) => [...e, comment]);
+      if (typeof comment !== "undefined") setComments((e) => [...e, comment]);
     });
   }
 
@@ -66,10 +70,7 @@ export const NewsPage = observer(() => {
 
   return (
     <div>
-      <Button
-        type="button"
-        onClick={() => handleClick()}
-      >
+      <Button type="button" onClick={() => handleClick()}>
         Go back
       </Button>
       <div className="SingleNews">
@@ -78,7 +79,7 @@ export const NewsPage = observer(() => {
             <Segment attached>
               <a href={singleNews?.url}>{singleNews?.url}</a>
             </Segment>
-            <Segment attached style={{ marginBottom: '20px' }}>
+            <Segment attached style={{ marginBottom: "20px" }}>
               <h3>{singleNews?.title}</h3>
               <p>{singleNews?.time}</p>
               <p>Author: {singleNews?.by}</p>
@@ -86,17 +87,14 @@ export const NewsPage = observer(() => {
             </Segment>
             {Comments?.map((SingleComment, i) => (
               <div key={i}>
-                <Comment
-                  comment={SingleComment}
-                />
+                <Comment comment={SingleComment} />
               </div>
             ))}
           </Container>
         )}
-        
       </div>
     </div>
   );
-})
+});
 
 export default NewsPage;

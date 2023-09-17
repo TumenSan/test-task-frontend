@@ -1,34 +1,42 @@
-import { makeObservable, observable, computed, action, runInAction } from "mobx";
+import {
+  makeObservable,
+  observable,
+  computed,
+  action,
+  runInAction,
+} from "mobx";
 import { NewsModel } from "../components/Models/NewsModel";
 
 class NewsState {
   ListNews = [];
 
   constructor(ListNews) {
-      makeObservable(this, {
-          ListNews: observable,
-          getListNews: computed,
-          getSingleNews: action,
-          fetchLast100News: action
-      })
-      this.ListNews = ListNews
+    makeObservable(this, {
+      ListNews: observable,
+      getListNews: computed,
+      getSingleNews: action,
+      fetchLast100News: action,
+    });
+    this.ListNews = ListNews;
   }
 
   get getListNews() {
-    return this.ListNews
+    return this.ListNews;
   }
 
   getSingleNews(id) {
-    let foundSingleNews = this.ListNews.find(e => e.id.toString() === id.toString());
-    return foundSingleNews
+    let foundSingleNews = this.ListNews.find(
+      (e) => e.id.toString() === id.toString()
+    );
+    return foundSingleNews;
   }
 
   // Функция для обработки 100 новостей
   async fetchLast100News() {
     this.ListNews = [];
     // Находим последние новости
-    let Last100Id = await fetch(`http://localhost:5000/api/lastnews`).then((response) =>
-      response.json()
+    let Last100Id = await fetch(`http://localhost:5000/api/lastnews`).then(
+      (response) => response.json()
     );
     Last100Id.forEach(async (NewsId, index) => {
       try {
@@ -37,7 +45,10 @@ class NewsState {
         if (!data.hasOwnProperty("error"))
           if (data.type === "story") {
             runInAction(() => {
-              let NewsDate = new Date(data?.time * 1000).toLocaleString(undefined, { hour: 'numeric', minute: 'numeric' });
+              let NewsDate = new Date(data?.time * 1000).toLocaleString(
+                undefined,
+                { hour: "numeric", minute: "numeric" }
+              );
               this.ListNews.push(
                 new NewsModel(
                   data.id,
@@ -51,7 +62,7 @@ class NewsState {
                   data.url
                 )
               );
-            })
+            });
           }
       } catch (error) {
         console.log(error);

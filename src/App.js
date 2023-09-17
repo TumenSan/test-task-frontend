@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
 import { NewsPage } from "./components/NewsPage/NewsPage";
-import { NewsList } from './components/NewsList/NewsList';
+import { NewsList } from "./components/NewsList/NewsList";
 import { Header, Button } from "semantic-ui-react";
 import newsState from "./state/NewsState";
 import "./App.css";
@@ -24,11 +24,11 @@ const ScrollToTop = () => {
     const handleScroll = () => {
       prevScrollRef.current = window.pageYOffset;
     };
-    
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -57,12 +57,9 @@ function App() {
       </Header>
       <Switch>
         <Route exact path="/">
-        <Button
-          type="button"
-          onClick={() => newsState.fetchLast100News()}
-        >
-          Update
-        </Button>
+          <Button type="button" onClick={() => newsState.fetchLast100News()}>
+            Update
+          </Button>
           <NewsList />
         </Route>
         <Route path="/news/:id">
