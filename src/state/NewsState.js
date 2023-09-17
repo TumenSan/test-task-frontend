@@ -51,7 +51,6 @@ class NewsState {
                   data.url
                 )
               );
-              this.NewsListIsLoading = false;
             })
           }
       } catch (error) {
