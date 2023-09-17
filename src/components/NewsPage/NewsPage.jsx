@@ -1,12 +1,12 @@
 //import './NewsPage.css';
-import { CommentModel } from "./Models/CommentModel";
+import { CommentModel } from "../Models/CommentModel";
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Container, Button, Segment } from "semantic-ui-react";
 import { observer } from 'mobx-react';
-import newsState from "../state/NewsState";
-import { Comment } from "./Comment";
+import newsState from "../../state/NewsState";
+import { Comment } from "../Comment/Comment";
 
 // Создадим компонент для отображения новости
 export const NewsPage = observer(() => {

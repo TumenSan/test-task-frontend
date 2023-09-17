@@ -1,5 +1,5 @@
 //import './NewsPage.css';
-import { CommentModel } from "./Models/CommentModel";
+import { CommentModel } from "../Models/CommentModel";
 import React, { useState, useEffect } from "react";
 import { Container, Button, Segment } from "semantic-ui-react";
 

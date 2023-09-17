@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
-import { NewsPage } from "./components/NewsPage";
-import { NewsList } from './components/NewsList';
+import { NewsPage } from "./components/NewsPage/NewsPage";
+import { NewsList } from './components/NewsList/NewsList';
 import { Header, Button } from "semantic-ui-react";
 import newsState from "./state/NewsState";
 import "./App.css";

@@ -1,7 +1,7 @@
 import './NewsList.css'
 import { observer } from "mobx-react";
 import { Link } from "react-router-dom";
-import newsState from "../state/NewsState";
+import newsState from "../../state/NewsState";
 
 // Компонент для отображения списка новостей
 export const NewsList = observer(() => {
