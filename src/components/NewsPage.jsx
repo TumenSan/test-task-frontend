@@ -47,10 +47,10 @@ export const NewsPage = observer(() => {
 
   async function fetchComments(Comments){
     Comments.forEach(async (CommentId, index) => {
-      console.log(1);
       let comment = await fetchSingleComment(CommentId);
       console.log(comment);
-      setComments((e) => [...e, comment]);
+      if (typeof comment !== 'undefined')
+        setComments((e) => [...e, comment]);
     });
   }
 
@@ -64,9 +64,6 @@ export const NewsPage = observer(() => {
     if (foundSingleNews?.kids && foundSingleNews.kids.length > 0) {
       fetchComments(foundSingleNews.kids);
     }
-
-    //CommentState.fetchComments();
-    //GetComments(foundOne);
   }, [params.id]);
 
   return (
@@ -75,7 +72,7 @@ export const NewsPage = observer(() => {
         type="button"
         onClick={() => handleClick()}
       >
-        Вернуться назад
+        Go back
       </Button>
       <div className="SingleNews">
         {singleNews && (

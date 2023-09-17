@@ -7,6 +7,7 @@ import { Container, Button, Segment } from "semantic-ui-react";
 export const Comment = ({ comment }) => {
   const [expanded, setExpanded] = useState(false);
   const [Comments, setComments] = useState([]);
+  const [GoodComment, setGoodComment] = useState(false);
 
   // Функция для обработки комментария
   async function fetchSingleComment(CommentId) {
@@ -47,6 +48,8 @@ export const Comment = ({ comment }) => {
   }
 
   useEffect(() => {
+    if ((comment.hasOwnProperty("by")) && (comment.hasOwnProperty("text")) && (comment.hasOwnProperty("time")))
+      setGoodComment(true);
     if (comment?.kids && comment.kids.length > 0) {
       fetchComments(comment.kids);
     }
@@ -54,32 +57,34 @@ export const Comment = ({ comment }) => {
 
   return (
     <div>
-      <Container style={{ paddingBottom: '20px' }}>
-        <Segment attached>
-          <p>By: {comment?.by}</p>
-          <p dangerouslySetInnerHTML={{ __html: comment?.text }}></p>
-          <p>{comment?.time}</p>
-        </Segment>
-        {comment.hasOwnProperty("kids") && Array.isArray(comment.kids) && comment.kids.length > 0 && (
+      {GoodComment && (
+        <Container style={{ paddingBottom: '20px' }}>
           <Segment attached>
-            <Button
-              type="button"
-              onClick={() => toggleReplies()}
-            >
-
-              {expanded ? "Close replies" : "Open replies"}
-            </Button>
+            <p>By: {comment?.by}</p>
+            <p dangerouslySetInnerHTML={{ __html: comment?.text }}></p>
+            <p>{comment?.time}</p>
           </Segment>
-        )}
-        {expanded &&
-          comment?.kids.map((reply, index) => (
+          {comment.hasOwnProperty("kids") && Array.isArray(comment.kids) && comment.kids.length > 0 && (
             <Segment attached>
-              <div key={index} style={{ marginLeft: "20px" }}>
-                <Comment comment={reply} />
-              </div>
+              <Button
+                type="button"
+                onClick={() => toggleReplies()}
+              >
+
+                {expanded ? "Close replies" : "Open replies"}
+              </Button>
             </Segment>
-        ))}
-      </Container >
+          )}
+          {expanded &&
+            comment?.kids.map((reply, index) => (
+              <Segment attached>
+                <div key={index} style={{ marginLeft: "20px" }}>
+                  <Comment comment={reply} />
+                </div>
+              </Segment>
+          ))}
+        </Container >
+      )}
     </div>
   );
 }
