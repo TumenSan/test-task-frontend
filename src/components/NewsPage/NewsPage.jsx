@@ -55,8 +55,6 @@ export const NewsPage = observer(() => {
   }
 
   useEffect(() => {
-    console.log(newsState.ListNews);
-    console.log(newsState.NewsListIsLoading);
     const foundSingleNews = newsState.getSingleNews(params.id);
     setCountComments(foundSingleNews.kids?.length || 0);
     console.log(foundSingleNews);

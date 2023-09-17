@@ -42,7 +42,7 @@ export const Comment = ({ comment }) => {
   async function fetchComments(Comments){
     Comments.forEach(async (CommentId, index) => {
       let comment = await fetchSingleComment(CommentId);
-      if (comment)
+      if (typeof comment !== 'undefined')
         setComments((e) => [...e, comment]);
     });
   }
@@ -76,7 +76,7 @@ export const Comment = ({ comment }) => {
             </Segment>
           )}
           {expanded &&
-            comment?.kids.map((reply, index) => (
+            Comments.map((reply, index) => (
               <Segment attached>
                 <div key={index} style={{ marginLeft: "20px" }}>
                   <Comment comment={reply} />

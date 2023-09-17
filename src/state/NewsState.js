@@ -3,20 +3,15 @@ import { NewsModel } from "../components/Models/NewsModel";
 
 class NewsState {
   ListNews = [];
-  NewsListIsLoading = true;
 
-  constructor(ListNews, NewsListIsLoading) {
+  constructor(ListNews) {
       makeObservable(this, {
           ListNews: observable,
-          NewsListIsLoading: observable,
           getListNews: computed,
           getSingleNews: action,
-          clgNews: action,
-          getNewsListIsLoading: computed,
           fetchLast100News: action
       })
       this.ListNews = ListNews
-      this.NewsListIsLoading = NewsListIsLoading
   }
 
   get getListNews() {
@@ -26,15 +21,6 @@ class NewsState {
   getSingleNews(id) {
     let foundSingleNews = this.ListNews.find(e => e.id.toString() === id.toString());
     return foundSingleNews
-  }
-
-  clgNews() {
-    console.log(this.ListNews[0]);
-    console.log(this.ListNews[1]);
-  }
-
-  get getNewsListIsLoading() {
-    return this.getNewsListIsLoading
   }
 
   // Функция для обработки 100 новостей
