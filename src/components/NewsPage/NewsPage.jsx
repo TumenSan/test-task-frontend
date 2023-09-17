@@ -50,6 +50,17 @@ export const NewsPage = observer(() => {
     }
   }
 
+  // Функция для обновления комментариев
+  async function UpdateComments() {
+    setComments([]);
+    const foundSingleNews = newsState.getSingleNews(params.id);
+    setCountComments(foundSingleNews.kids?.length || 0);
+    setSingleNews(foundSingleNews);
+    if (foundSingleNews?.kids && foundSingleNews.kids.length > 0) {
+      fetchComments(foundSingleNews.kids);
+    }
+  }
+
   async function fetchComments(Comments) {
     Comments.forEach(async (CommentId, index) => {
       let comment = await fetchSingleComment(CommentId);
@@ -70,8 +81,11 @@ export const NewsPage = observer(() => {
 
   return (
     <div>
-      <Button type="button" onClick={() => handleClick()}>
+      <Button type="button" style={{ marginBottom: "20px", marginTop: "10px" }} onClick={() => handleClick()}>
         Go back
+      </Button>
+      <Button type="button" onClick={() => UpdateComments()}>
+        Update
       </Button>
       <div className="SingleNews">
         {singleNews && (

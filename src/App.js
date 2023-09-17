@@ -57,7 +57,7 @@ function App() {
       </Header>
       <Switch>
         <Route exact path="/">
-          <Button type="button" onClick={() => newsState.fetchLast100News()}>
+          <Button type="button" style={{ marginTop: "10px" }} onClick={() => newsState.fetchLast100News()}>
             Update
           </Button>
           <NewsList />
